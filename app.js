@@ -29,7 +29,6 @@ app.get('/logIn', (req, res) => {
 
 app.post('/logInUser', async function(req, res) {
     let rows = await logInUserDB(req.body);
-    console.log(rows.length)
     
     if(rows.length == 0) {
         res.render("logInPage")
