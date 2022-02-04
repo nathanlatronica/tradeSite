@@ -29,40 +29,51 @@
           <h1 class="jumbotron-heading">Trade Site</h1>
           <p class="lead text-muted">Main Feed Page</p>
         </div>
+        <div class = "container">
+          <form action="/itemPost" method="POST">
+            <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Create Post</button>
+
+          </form>
+        </div>
       </section>
 
       <div class="album py-5 bg-light">
         <div class="container">
-
-          <div class="row">
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top"  alt="Item Picture">
-                <div class="card-body">
-                  <p class="card-text">Item Description</p>
+          
+        <%  var maxPosts = itemList.length - (itemList.length % 3)
+        console.log(itemList.length, maxPosts)
+          for(var i = 0; i < maxPosts; i += 3) { %>
+            <div class="row">
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <img class="card-img-top"  alt="Item Picture" src="<%= itemList[i].iURL %>">
+                  <div class="card-body">
+                    <p class="card-text"><%= itemList[i].iDes %> </p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top"  alt="Item Picture">
-                <div class="card-body">
-                  <p class="card-text">Item Description</p>
-    
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <img class="card-img-top"  alt="Item Picture" src="<%= itemList[i+1].iURL %>">
+                  <div class="card-body">
+                    <p class="card-text"> <%= itemList[i+1].iDes %></p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card mb-4 box-shadow">
-                <img class="card-img-top" alt="Item Picture">
-                <div class="card-body">
-                  <p class="card-text">Item Description</p>
-
+              <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                  <img class="card-img-top" alt="Item Picture" src="<%= itemList[i+2].iURL %>">
+                  <div class="card-body">
+                    <p class="card-text"><%= itemList[i+2].iDes %></p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-          </div>
+            </div>
+  
+          <% } %>
+
         </div>
       </div>
 

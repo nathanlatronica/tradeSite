@@ -10,8 +10,11 @@ app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get('/', (req, res) => {
-    res.render("homePage");
+app.get('/', async function (req, res) {
+    let itemList = await get3Items();
+    console.log(itemList);
+
+    res.render("homePage", {"itemList": itemList});
 });
 
 app.get('/signUp', (req, res) => {
@@ -20,7 +23,9 @@ app.get('/signUp', (req, res) => {
 
 app.post('/signUpUser',  async function(req, res) {
     let rows = await insertUser(req.body);
-    res.render('homePage')
+    let itemList = await get3Items();
+
+    res.render('homePage', {"itemList": itemList})
 });
 
 app.get('/logIn', (req, res) => {
@@ -29,14 +34,30 @@ app.get('/logIn', (req, res) => {
 
 app.post('/logInUser', async function(req, res) {
     let rows = await logInUserDB(req.body);
-    
+    let itemList = await fillFeedPage(req.body);
+    console.log(itemList);
+
     if(rows.length == 0) {
         res.render("logInPage")
     } else {
-        res.render("feedPage");
+        var user = req.body.name
+        res.render("feedPage", {"user": user, "itemList":itemList});
     }
 });
 
+app.post('/itemPost', function(req, res) {
+    var user = req.body.name
+
+    res.render("itemPostPage", {"user": user});
+});
+
+app.post('/insertItemPost', async function(req, res) {
+    let rows = await insertItemPost(req.body);
+    let itemList = await fillFeedPage(req.body);
+
+    var user = req.body.name
+    res.render("feedPage", {"user": user, "itemList":itemList});
+});
 
 app.listen(port, () => {
     console.log("connected");
@@ -85,6 +106,69 @@ function insertUser(body){ // This function submits the user info to the DB like
      });//promise 
   }
 
+  function insertItemPost(body){ // This function submits the user info to the DB like name, email, linkedIn....etc
+   
+    let conn = dbConnection();
+     return new Promise(function(resolve, reject){
+         conn.connect(function(err) {
+            if (err) throw err;       
+            let sql = `INSERT INTO posts
+                         (username, iName, iURL, iDes)
+                          VALUES (?,?,?,?)`;
+         
+            let params = [body.name, body.iName, body.iURL, body.iDes];
+            conn.query(sql, params, function (err, rows, fields) {
+               if (err) throw err;
+               //res.send(rows);
+               conn.end();
+               resolve(rows);
+            });
+         
+         });//connect
+     });//promise 
+  }
+
+function get3Items(){ // This function gets 3 random posts to make the home page look better
+   
+    let conn = dbConnection();
+     return new Promise(function(resolve, reject){
+         conn.connect(function(err) {
+            if (err) throw err;       
+            let sql = `SELECT * FROM posts
+                       ORDER BY RAND() LIMIT 3`;
+         
+            conn.query(sql, function (err, rows, fields) {
+               if (err) throw err;
+               //res.send(rows);
+               conn.end();
+               resolve(rows);
+            });
+         
+         });//connect
+     });//promise 
+}
+
+function fillFeedPage(body){ // This function gets a bunch of item posts for the feed page that dont belong to that user
+   
+    let conn = dbConnection();
+     return new Promise(function(resolve, reject){
+         conn.connect(function(err) {
+            if (err) throw err;       
+            let sql = `SELECT * FROM posts
+                       WHERE username != ?
+                       ORDER BY RAND() LIMIT 12`;
+            let params = [body.name]
+            conn.query(sql, params, function (err, rows, fields) {
+               if (err) throw err;
+               //res.send(rows);
+               conn.end();
+               resolve(rows);
+            });
+         
+         });//connect
+     });//promise 
+}
+
 function dbConnection(){
     let connection = mysql.createConnection({
       host: 'database-2.clpc6rpfxc90.us-west-1.rds.amazonaws.com',
@@ -95,16 +179,23 @@ function dbConnection(){
     })
   
     return connection
-  }
+}
 
-
-  function dbSetup() {
+function dbSetup() {
     let connection = dbConnection();
   
     connection.connect();
   
     var createUsers = 'CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(50), PRIMARY KEY (id));'
     connection.query(createUsers, function (err, rows, fields) {
+      if (err) {
+        throw err
+      }
+  
+    })
+
+    var createPosts = 'CREATE TABLE IF NOT EXISTS posts (id INT NOT NULL AUTO_INCREMENT, username VARCHAR(50), iName VARCHAR(50), iURL VARCHAR(200), iDes VARCHAR(125), PRIMARY KEY (id));'
+    connection.query(createPosts, function (err, rows, fields) {
       if (err) {
         throw err
       }
