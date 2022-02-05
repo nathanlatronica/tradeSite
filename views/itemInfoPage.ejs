@@ -39,7 +39,7 @@
               <div class="card mb-4 box-shadow">
                 <img class="card-img-top"  alt="Item Picture" src="<%= post[0].iURL %>">
                 <div class="card-body">
-                  <p class="card-text"><%= post[0].iDes %>></p>
+                  <p class="card-text"><%= post[0].iDes %></p>
                 </div>
               </div>
             </div>
@@ -62,7 +62,7 @@
                 <form method="POST" action="/postComment">
                   <input type="hidden" name="id" value="<%= post[0].id %>">
                   <input type="hidden" name="name" value="<%= activeUser %>">
-                  <textarea id="comment" name="comment" rows="4" cols="50" placeholder="I would be willing to trade my lamborghini for that!!"></textarea>
+                  <textarea id="comment" name="comment" rows="4" cols="40" placeholder="I would be willing to trade my lamborghini for that!!"></textarea>
                   <button type="submit" class="btn btn-lg btn-primary btn-block">Comment!</button>
 
                 </form>
