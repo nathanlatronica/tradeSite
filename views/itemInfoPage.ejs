@@ -7,7 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Trade Site - Feed Page</title>
+    <title>Trade Site - Item Name</title> <!-- eventually make it the items name -->
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -26,47 +26,50 @@
     <main role="main">
       <section class="jumbotron text-center">
         <div class="container">
-          <h1 class="jumbotron-heading">Trade Site</h1>
-          <p class="lead text-muted">Main Feed Page</p>
-        </div>
-        <div class = "container">
-          <form action="/itemPost" method="POST">
-            <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
-            <button type="submit" class="btn btn-lg btn-primary btn-block">Create Post</button>
-
-          </form>
+          <h1 class="jumbotron-heading">Item Info</h1>
         </div>
       </section>
 
       <div class="album py-5 bg-light">
         <div class="container">
           
-        <%  var maxPosts = itemList.length - (itemList.length % 3)
-            var tracker = 0
-            for(var i = 0; i < maxPosts; i += 3) { %>
-            <div class="row">
+          <div class="row">
 
-              <% for(var j = 0; j < 3; j++) { %>
-
-              <div class="col-md-4">
-                <form action="/getItemInfo" method="POST">
-                  <div class="card mb-4 box-shadow">
-                    <input type="image" alt="more info" class="card-img-top"  alt="Item Picture" src="<%= itemList[j + tracker].iURL %>">
-                    <div class="card-body">
-                      <p class="card-text"><%= itemList[j + tracker].iDes %> </p>
-                      <input type="hidden" name="activeUser" value="<%= user %>">
-                      <input type="hidden" name="id" value="<%= itemList[j + tracker].id %>">
-                    </div>
-                </form>
+            <div class="col-md-5">
+              <div class="card mb-4 box-shadow">
+                <img class="card-img-top"  alt="Item Picture" src="<%= post[0].iURL %>">
+                <div class="card-body">
+                  <p class="card-text"><%= post[0].iDes %>></p>
                 </div>
               </div>
-            
-              <% } 
-            tracker += 3        %>
-
             </div>
-  
-          <% } %>
+
+            <div class="col-md-4">
+              <div class="card mb-4 box-shadow">
+                <h1 class="jumbotron-heading">Comments</h1>
+                <div class="card-body">
+
+                  <% for(var i = 0; i < comments.length; i++) { %>
+
+                    <div class="card-body">
+                      <p class="card-text"><%= comments[i].comment %> </p>
+                      <p class="card-text"> - <%= comments[i].username %> </p>
+
+                    </div>
+                    
+                  <% } %>
+                </div>
+                <form method="POST" action="/postComment">
+                  <input type="hidden" name="id" value="<%= post[0].id %>">
+                  <input type="hidden" name="name" value="<%= activeUser %>">
+                  <textarea id="comment" name="comment" rows="4" cols="50" placeholder="I would be willing to trade my lamborghini for that!!"></textarea>
+                  <button type="submit" class="btn btn-lg btn-primary btn-block">Comment!</button>
+
+                </form>
+              </div>
+            </div>
+      
+          </div> 
 
         </div>
       </div>
