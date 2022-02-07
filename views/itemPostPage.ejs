@@ -9,7 +9,6 @@
 
     <title>Trade Site - Create a Post</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -22,16 +21,25 @@
   </head>
 
   <body class="text-center">
-    <form action ="/insertItemPost" method ='POST' >
-      <h1 class="h3 mb-3 font-weight-normal">Create an item post</h1>
+    <div class="container">
 
-      <input type="hidden" id="uName" name="name" class="form-control"  value= "<%= user %>">
-      <input id="itemName" name="iName" class="form-control" placeholder="Dishwasher.. etc" required autofocus>
-      <input id="imageURL" name="iURL" class="form-control" placeholder="https://i.imgur.com/HTJVZvF.png" required>
-      <textarea id="description" name="iDes" rows="4" cols="50" placeholder="Slightly used, still in great condition!"></textarea>
-      
-      <button type="submit" class="btn btn-lg btn-primary btn-block">Create!</button>
+      <form action="/refresh" method="POST">
+        <h1 class="h3 mb-3 font-weight-normal">Create an item post</h1>
 
+        <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
+        <button type="submit" class="btn btn-sm btn-secondary ">Back</button>
+
+      </form>
+
+      <form action ="/insertItemPost" method ='POST' >
+
+        <input type="hidden" id="uName" name="name" class="form-control"  value= "<%= user %>">
+        <input id="itemName" name="iName" class="form-control" placeholder="Dishwasher.. etc" required autofocus>
+        <input id="imageURL" name="iURL" class="form-control" placeholder="https://i.imgur.com/HTJVZvF.png" required autofocus>
+        <textarea id="description" name="iDes" rows="4" cols="50" placeholder="Slightly used, still in great condition!"></textarea>
+        
+        <button type="submit" class="btn btn-sm btn-primary ">Create!</button>
     </form>
+    
   </body>
 </html>

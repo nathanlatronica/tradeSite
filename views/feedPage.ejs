@@ -29,13 +29,30 @@
           <h1 class="jumbotron-heading">Trade Site</h1>
           <p class="lead text-muted">Main Feed Page</p>
         </div>
-        <div class = "container">
-          <form action="/itemPost" method="POST">
-            <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
-            <button type="submit" class="btn btn-lg btn-primary btn-block">Create Post</button>
+        <div class = "search">
+          <div class= "row">
+            <form action="/itemPost" method="POST">
+              <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
+              <button style="margin-bottom:.5cm;" type="submit" class="btn btn-sm btn-secondary btn-block">Create Post</button>
+            </form>
+            <form action="/refresh" method="POST">
+              <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
+              <button type="submit" class="btn btn-sm btn-secondary btn-block">Refresh</button>
+            </form>
+            <a href="/" style="margin-bottom:.5cm;" class="btn-sm btn-secondary ">Log Out</a>
 
-          </form>
+          </div>
         </div>
+        <form action="/searchItem" method="POST">
+          <div class = "search">
+            <input type="hidden" id="username" name="name" class="form-control" value= "<%= user %>">
+            <input class="lead text-muted" id="name" name="search" placeholder="Search Bar ex.Bicycle">
+          </div>
+          <div class = "search">
+            <button type="submit"  class="btn  btn-primary btn-block">Search</button>
+          </div>
+        </form>
+
       </section>
 
       <div class="album py-5 bg-light">

@@ -35,7 +35,6 @@ app.get('/logIn', (req, res) => {
 app.post('/logInUser', async function(req, res) {
     let rows = await logInUserDB(req.body);
     let itemList = await fillFeedPage(req.body);
-    console.log(itemList);
 
     if(rows.length == 0) {
         res.render("logInPage")
@@ -63,7 +62,6 @@ app.post('/getItemInfo', async function(req, res) {
     let post = await getPost(req.body);
     let comments = await getPostComments(req.body);
     let activeUser = req.body.activeUser;
-    console.log("Comments: ", comments)
 
     res.render('itemInfoPage', {"post":post, "comments": comments, "activeUser":activeUser})
 });
@@ -75,6 +73,22 @@ app.post('/postComment', async function(req, res) {
     let activeUser = req.body.activeUser;
 
     res.render('itemInfoPage', {"post":post, "comments": comments, "activeUser":activeUser})
+});
+
+app.post("/searchItem", async function(req, res) {
+    let itemList = await getSearchItems(req.body);
+    let user = req.body.name;
+    console.log("search for : ", req.body.search)
+    console.log("search: ", itemList)
+    
+    res.render("feedPage", {"user": user, "itemList":itemList});
+});
+
+app.post("/refresh", async function(req, res) {
+    let itemList = await fillFeedPage(req.body);
+    let user = req.body.name
+    res.render("feedPage", {"user": user, "itemList":itemList});
+    
 });
 
 
@@ -250,6 +264,28 @@ function insertComment(body){ // This function submits the user info to the DB l
          
         });//connect
     });//promise 
+}
+
+function getSearchItems(body){ 
+   
+    let conn = dbConnection();
+     return new Promise(function(resolve, reject){
+         conn.connect(function(err) {
+            if (err) throw err;       
+            let sql = `SELECT * FROM posts
+                       WHERE iName LIKE ?
+                       ORDER BY RAND() LIMIT 18`;
+            
+            let params = [body.search]
+            conn.query(sql, params, function (err, rows, fields) {
+               if (err) throw err;
+               //res.send(rows);
+               conn.end();
+               resolve(rows);
+            });
+         
+         });//connect
+     });//promise 
 }
 
 
