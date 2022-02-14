@@ -188,8 +188,7 @@ function fillFeedPage(body){ // This function gets a bunch of item posts for the
          conn.connect(function(err) {
             if (err) throw err;       
             let sql = `SELECT * FROM posts
-                       WHERE username != ?
-                       ORDER BY RAND() LIMIT 18`;
+                       ORDER BY RAND() LIMIT 60`;
             let params = [body.name]
             conn.query(sql, params, function (err, rows, fields) {
                if (err) throw err;
